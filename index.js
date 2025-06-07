@@ -2,10 +2,12 @@ import express from 'express'
 import dotenv from 'dotenv'
 import { Sequelize } from 'sequelize'
 import usuarioModel from './models/usuario.js'
+import cors from 'cors'
 
 dotenv.config()
 
 const app = express()
+app.use(cors())
 app.use(express.json())
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
@@ -35,7 +37,7 @@ app.listen(PORT, async () => {
   try {
     await sequelize.authenticate()
     console.log('🟢 Base de datos conectada')
-    await sequelize.sync({ force: true }) // usar solo si querés crear la tabla desde cero
+    await sequelize.sync() // usar solo si querés crear la tabla desde cero
     console.log(`🚀 Servidor escuchando en puerto ${PORT}`)
   } catch (err) {
     console.error('🔴 Error conectando con la base de datos:', err)
